@@ -1,5 +1,5 @@
-public class 4row {
+public class Main {
 	public static void main(String[] args) {
-		System.out.println("Welcome mass");
+		Board board = new Board();
 	}
 }
