@@ -1,5 +1,7 @@
-public class Node {
-	Capsule[] capsul;
+import java.util.*;
+
+public class Node implements Cloneable{
+	List<Capsule> capsules = new LinkedList<Capsule>();
 	String pos;
 	boolean played;
 	int player;
@@ -11,20 +13,25 @@ public class Node {
 	}
 
 	public void addCap(Capsule cap) {
-		Capsule[] newCapsul = new Capsule[capsul.length + 1];
-		for (int i = 0; i < capsul.length; i++) {
-			newCapsul[i] = capsul[i];
-		}
-		newCapsul[newCapsul.length - 1] = cap;
-		capsul = newCapsul;
+		capsules.add(cap);
 	}
 
-	public void play(int player) {
+	public boolean play(int player) {
+		if (played) return false;
 		this.player = player;
 		this.played = true;
-		for (int i = 0; i < capsul.length; i++) {
-			capsul[i].makeMove(this.pos, player);
+		for (Capsule capsul : capsules) {
+			capsul.makeMove(this.pos, player);
 		}
+		return true;
+	}
+
+	public boolean test(int player) {
+		if (played) return false;
+		for (Capsule capsul : capsules) {
+			capsul.testMove(this.pos, player);
+		}
+		return true;
 	}
 
 	public int getPlayer() {
@@ -33,5 +40,9 @@ public class Node {
 
 	public String getPos() {
 		return pos;
+	}
+
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

@@ -1,9 +1,9 @@
 import java.util.*;
 
-public class Board {
+public class Board implements Cloneable{
 	List<Node> nodes = new LinkedList<Node>();
 	List<Capsule> capsules = new LinkedList<Capsule>();
-	Hash<Integer, String> dict = new HashMap<Integer, String>();
+	HashMap<Integer, String> dict = new HashMap<Integer, String>();
 
 	public Board() {
 		dict.put(1, "A");
@@ -16,6 +16,28 @@ public class Board {
 		dict.put(8, "H");
 		createNodes();
 		createCapsules();
+		// for (Iterator<Capsule> capsulIterator = capsules.iterator(); capsulIterator.hasNext(); ) {
+		// 	capsulIterator.next().print();
+		// }
+	}
+
+	public boolean play(String pos, int player) {
+		if (nodes.stream().filter(node -> {
+				return node.getPos().equals(pos);
+			}).findFirst()
+				.get()
+				.play(player)) {
+			return true;
+		} else { return false; }
+	}
+
+	public int getTotalValue() {
+		int total = 0;
+		for (Capsule capsul : capsules) {
+			if (capsul.isAlive()) total += capsul.getValue();
+		}
+		System.out.println(total);
+		return total;
 	}
 
 	private void createNodes() {
@@ -37,26 +59,27 @@ public class Board {
 		int botRange = 1;
 		int topRange = 5;
 		for (int k = 1; k < 6; k++) {
-			List<Node> caps;
-			List<Node> crit;
+			List<Node> caps = new LinkedList<Node>();
+			List<Node> crit = new LinkedList<Node>();
 			if (k == 1) {
 				caps.add(
 						nodes
 						.stream()
 						.filter(node -> {
 							String pos = yPos + "5";
-							return node.getPos() == pos; 
+							return node.getPos().equals(pos);
 						})
 						.findFirst()
 						.get()
 				);
-				for (int capIt = botRange; capIt < topRange; capIt++) {
+				for (int tempCap = botRange; tempCap < topRange; tempCap++) {
+					final int capIt = tempCap;
 					crit.add(
 							nodes
 							.stream()
 							.filter(node -> {
 								String pos = yPos + Integer.toString(capIt);
-								return node.getPos() == pos; 
+								return node.getPos().equals(pos); 
 							})
 							.findFirst()
 							.get()
@@ -69,30 +92,33 @@ public class Board {
 						.stream()
 						.filter(node -> {
 							String pos = yPos + "4";
-							return node.getPos() == pos; 
+							return node.getPos().equals(pos); 
 						})
 						.findFirst()
 						.get()
 				);
-				for (int capIt = botRange + 1; capIt <= topRange; capIt++) {
+				for (int tempCap = botRange + 1; tempCap <= topRange; tempCap++) {
+					final int capIt = tempCap;
 					crit.add(
 							nodes
 							.stream()
 							.filter(node -> {
 								String pos = yPos + Integer.toString(capIt);
-								return node.getPos() == pos; 
+								return node.getPos().equals(pos); 
 							})
 							.findFirst()
 							.get()
 					);
 				}
 			} else {
+				final int botNum = botRange;
+				final int topNum = topRange;
 				caps.add(
 						nodes
 						.stream()
 						.filter(node -> {
-							String pos = yPos + Integer.toString(botRange);
-							return node.getPos() == pos; 
+							String pos = yPos + Integer.toString(botNum);
+							return node.getPos().equals(pos); 
 						})
 						.findFirst()
 						.get()
@@ -101,26 +127,27 @@ public class Board {
 						nodes
 						.stream()
 						.filter(node -> {
-							String pos = yPos + Integer.toString(topRange);
-							return node.getPos() == pos; 
+							String pos = yPos + Integer.toString(topNum);
+							return node.getPos().equals(pos); 
 						})
 						.findFirst()
 						.get()
 				);
-				for (int capIt = botRange + 1; capIt < topRange; capIt++) {
+				for (int tempCap = botRange + 1; tempCap < topRange; tempCap++) {
+					final int capIt = tempCap;
 					crit.add(
 							nodes
 							.stream()
 							.filter(node -> {
 								String pos = yPos + Integer.toString(capIt);
-								return node.getPos() == pos; 
+								return node.getPos().equals(pos); 
 							})
 							.findFirst()
 							.get()
 					);
 				}
 				botRange++;
-				topRange++;
+				if (topRange < 8) topRange++;
 			}
 			capsules.add(new Capsule(caps, crit, 2 - caps.size()));
 		}
@@ -130,26 +157,27 @@ public class Board {
 		int botRange = 1;
 		int topRange = 5;
 		for (int k = 1; k < 6; k++) {
-			List<Node> caps;
-			List<Node> crit;
+			List<Node> caps = new LinkedList<Node>();
+			List<Node> crit = new LinkedList<Node>();
 			if (k == 1) {
 				caps.add(
 						nodes
 						.stream()
 						.filter(node -> {
 							String pos = dict.get(5) + Integer.toString(xPos);
-							return node.getPos() == pos; 
+							return node.getPos().equals(pos); 
 						})
 						.findFirst()
 						.get()
 				);
-				for (int capIt = botRange; capIt < topRange; capIt++) {
+				for (int tempCap = botRange; tempCap < topRange; tempCap++) {
+					final int capIt = tempCap;
 					crit.add(
 							nodes
 							.stream()
 							.filter(node -> {
 								String pos = dict.get(capIt) + Integer.toString(xPos);
-								return node.getPos() == pos; 
+								return node.getPos().equals(pos); 
 							})
 							.findFirst()
 							.get()
@@ -162,30 +190,33 @@ public class Board {
 						.stream()
 						.filter(node -> {
 							String pos = dict.get(4) + Integer.toString(xPos);
-							return node.getPos() == pos; 
+							return node.getPos().equals(pos); 
 						})
 						.findFirst()
 						.get()
 				);
-				for (int capIt = botRange + 1; capIt <= topRange; capIt++) {
+				for (int tempCap = botRange + 1; tempCap <= topRange; tempCap++) {
+					final int capIt = tempCap;
 					crit.add(
 							nodes
 							.stream()
 							.filter(node -> {
 								String pos = dict.get(capIt) + Integer.toString(xPos);
-								return node.getPos() == pos; 
+								return node.getPos().equals(pos); 
 							})
 							.findFirst()
 							.get()
 					);
 				}
 			} else {
+				final int botNum = botRange;
+				final int topNum = topRange;
 				caps.add(
 						nodes
 						.stream()
 						.filter(node -> {
-							String pos = dict.get(botRange) + Integer.toString(xPos);
-							return node.getPos() == pos; 
+							String pos = dict.get(botNum) + Integer.toString(xPos);
+							return node.getPos().equals(pos); 
 						})
 						.findFirst()
 						.get()
@@ -194,28 +225,33 @@ public class Board {
 						nodes
 						.stream()
 						.filter(node -> {
-							String pos = dict.get(topRange) + Integer.toString(xPos);
-							return node.getPos() == pos; 
+							String pos = dict.get(topNum) + Integer.toString(xPos);
+							return node.getPos().equals(pos); 
 						})
 						.findFirst()
 						.get()
 				);
-				for (int capIt = botRange + 1; capIt < topRange; capIt++) {
+				for (int tempCap = botRange + 1; tempCap < topRange; tempCap++) {
+					final int capIt = tempCap;
 					crit.add(
 							nodes
 							.stream()
 							.filter(node -> {
 								String pos = dict.get(capIt) + Integer.toString(xPos);
-								return node.getPos() == pos; 
+								return node.getPos().equals(pos); 
 							})
 							.findFirst()
 							.get()
 					);
 				}
 				botRange++;
-				topRange++;
+				if (topRange < 8) topRange++;
 			}
 			capsules.add(new Capsule(caps, crit, 2 - caps.size()));
 		}
+	}
+
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }
