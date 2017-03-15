@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Node {
+public class Node implements Cloneable{
 	List<Capsule> capsules = new LinkedList<Capsule>();
 	String pos;
 	boolean played;
@@ -40,5 +40,9 @@ public class Node {
 
 	public String getPos() {
 		return pos;
+	}
+
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

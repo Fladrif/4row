@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Board {
+public class Board implements Cloneable{
 	List<Node> nodes = new LinkedList<Node>();
 	List<Capsule> capsules = new LinkedList<Capsule>();
 	HashMap<Integer, String> dict = new HashMap<Integer, String>();
@@ -249,5 +249,9 @@ public class Board {
 			}
 			capsules.add(new Capsule(caps, crit, 2 - caps.size()));
 		}
+	}
+
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }
