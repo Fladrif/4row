@@ -1,8 +1,9 @@
 import java.util.*;
 
-public class Capsule implements Cloneable{
+public class Capsule {
 	List<Node> caps = new LinkedList<Node>();
 	List<Node> crit = new LinkedList<Node>();
+  List<TestValues> testVal = new LinkedList<TestValues>();
 	boolean alive;
 	int owner;
 	int capsPlayed;
@@ -135,9 +136,5 @@ public class Capsule implements Cloneable{
 			System.out.print(critIterator.next().getPos() + " ");
 		}
 		System.out.println();
-	}
-
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
 	}
 }
