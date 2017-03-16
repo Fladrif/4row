@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Board implements Cloneable{
+public class Board {
 	List<Node> nodes = new LinkedList<Node>();
 	List<Capsule> capsules = new LinkedList<Capsule>();
 	HashMap<Integer, String> dict = new HashMap<Integer, String>();
@@ -251,7 +251,30 @@ public class Board implements Cloneable{
 		}
 	}
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+  // TODO need to add depth param
+	public boolean test(String pos, int player, int depth) {
+		return nodes.stream().filter(node -> {
+				return node.getPos().equals(pos);
+			}).findFirst()
+				.get()
+				.test(player, depth);
 	}
+
+	public int getTotalTestValue(int depth) {
+		int total = 0;
+		for (Capsule capsul : capsules) {
+			if (capsul.isTestAlive(depth)) total += capsul.getTestValue(depth);
+		}
+		System.out.println(total);
+		return total;
+	}
+
+  public void rewindAll(int depth) {
+		for (Capsule capsul : capsules) {
+      capsul.alignTestToDepth(depth);
+		}
+    for (Node nod : nodes) {
+      nod.alignTestToDepth(depth);
+    }
+  }
 }

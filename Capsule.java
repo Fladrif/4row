@@ -1,8 +1,9 @@
 import java.util.*;
 
-public class Capsule implements Cloneable{
+public class Capsule {
 	List<Node> caps = new LinkedList<Node>();
 	List<Node> crit = new LinkedList<Node>();
+  Queue<TestCapsules> testCaps = new LinkedList<TestCapsules>();
 	boolean alive;
 	int owner;
 	int capsPlayed;
@@ -44,79 +45,58 @@ public class Capsule implements Cloneable{
 				alive = false;
 			}
 		}
-		if (alive) calculateVal();
+		if (alive) value = calculateVal(this.capsPlayed, this.critPlayed);
 	}
 
-	// TODO rewrite to have test values persist in Capsule
-	public void testMove(String pos, int player) {
-		Node cap = caps.stream()
-			.filter(node -> node.getPos().equals(pos))
-			.findFirst().orElse(null);
-		if (cap != null) {
-			capsPlayed += cap.getPlayer() != owner ? 1 : 0;
-			return;
-		}
-		if (owner == 0) owner = player;
-		Node cri = crit.stream()
-			.filter(node -> node.getPos().equals(pos))
-			.findFirst().orElse(null);
-		if (cri != null) {
-			if (cri.getPlayer() == owner) {
-				critPlayed += 1;
-			} else {
-				alive = false;
-			}
-		}
-		if (alive) calculateVal();
-	}
-
-	private void calculateVal() {
-		switch (capsPlayed) {
+	private int calculateVal(int caps, int crit) {
+    int val = 0;
+		switch (caps) {
 			case 0:
-				switch (critPlayed) {
+				switch (crit) {
 					case 0:
-						value = 5 * owner;
+						val = 5 * owner;
 						break;
 					case 1:
-						value = 12 * owner;
+						val = 12 * owner;
 						break;
 					case 2:
-						value = 40 * owner;
+						val = 40 * owner;
 						break;
 					case 3:
-						value = 40 * owner;
+						val = 40 * owner;
 				}
 				break;
 			case 1:
-				switch (critPlayed) {
+				switch (crit) {
 					case 0:
-						value = 3 * owner;
+						val = 3 * owner;
 						break;
 					case 1:
-						value = 4 * owner;
+						val = 4 * owner;
 						break;
 					case 2:
-						value = 10 * owner;
+						val = 10 * owner;
 						break;
 					case 3:
-						value = 40 * owner;
+						val = 40 * owner;
 				}
 				break;
 			case 2:
-				switch (critPlayed) {
+				switch (crit) {
 					case 0:
-						value = 1 * owner;
+						val = 1 * owner;
 						break;
 					case 1:
-						value = 3 * owner;
+						val = 3 * owner;
 						break;
 					case 2:
-						value = 8 * owner;
+						val = 8 * owner;
 						break;
 					case 3:
-						value = 40 * owner;
+						val = 40 * owner;
 				}
 		}
+    return val;
 	}
 
 	public int getValue() {
@@ -137,7 +117,69 @@ public class Capsule implements Cloneable{
 		System.out.println();
 	}
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public void testMove(String pos, int player, int depth) {
+    alignTestToDepth(depth - 1);
+
+    if (testCaps.size() == 0) {
+      testCaps.add(new TestCapsules(alive, owner, capsPlayed, critPlayed, value, depth));
+    } else {
+      boolean tempAlive = testCaps.peek().getAlive();
+      int tempOwner = testCaps.peek().getOwner();
+      int tempCapsPlayed = testCaps.peek().getCapsPlayed();
+      int tempCritPlayed = testCaps.peek().getCritPlayed();
+      int tempValue = testCaps.peek().getValue();
+      testCaps.add(new TestCapsules(tempAlive, tempOwner, tempCapsPlayed, tempCritPlayed, tempValue, depth));
+    }
+
+		Node cap = caps.stream()
+			.filter(node -> node.getPos().equals(pos))
+			.findFirst().orElse(null);
+		if (cap != null) {
+      if (player != testCaps.peek().getOwner()) {
+        testCaps.peek().setCapsPlayed(testCaps.peek().getCapsPlayed() + 1);
+      }
+			return;
+		}
+		if (owner == 0) owner = player;
+		Node cri = crit.stream()
+			.filter(node -> node.getPos().equals(pos))
+			.findFirst().orElse(null);
+		if (cri != null) {
+			if (player == owner) {
+        testCaps.peek().setCritPlayed(testCaps.peek().getCritPlayed() + 1);
+			} else {
+        testCaps.peek().setAlive(false);
+			}
+		}
+		if (testCaps.peek().getAlive()) {
+      int val = calculateVal(testCaps.peek().getCapsPlayed(), testCaps.peek().getCritPlayed());
+      testCaps.peek().setValue(val);
+    }
 	}
+
+  public int getTestValue(int depth) {
+    alignTestToDepth(depth);
+    if (testCaps.size() > 0) {
+      int temp = testCaps.peek().getValue();
+      if (temp > 0) System.out.println(temp);
+      return testCaps.peek().getValue();
+    } else {
+      return value;
+    }
+  }
+
+	public boolean isTestAlive(int depth) {
+    alignTestToDepth(depth);
+    if (testCaps.size() > 0) {
+		  return testCaps.peek().getAlive();
+    } else {
+      return alive;
+    }
+	}
+
+  public void alignTestToDepth(int depth) {
+    while ( testCaps.size() > 0 && testCaps.peek().getDepth() > depth) {
+      testCaps.remove();
+    }
+  }
 }

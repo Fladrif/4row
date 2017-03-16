@@ -1,7 +1,8 @@
 import java.util.*;
 
-public class Node implements Cloneable{
+public class Node {
 	List<Capsule> capsules = new LinkedList<Capsule>();
+  Queue<TestNodes> testNodes = new LinkedList<TestNodes>();
 	String pos;
 	boolean played;
 	int player;
@@ -26,14 +27,6 @@ public class Node implements Cloneable{
 		return true;
 	}
 
-	public boolean test(int player) {
-		if (played) return false;
-		for (Capsule capsul : capsules) {
-			capsul.testMove(this.pos, player);
-		}
-		return true;
-	}
-
 	public int getPlayer() {
 		return player;
 	}
@@ -42,7 +35,33 @@ public class Node implements Cloneable{
 		return pos;
 	}
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public boolean test(int player, int depth) {
+    alignTestToDepth(depth - 1);
+
+    if (testNodes.size() > 0) {
+      if (testNodes.peek().getPlayed()) return false;
+    } else {
+      if (played) return false;
+    }
+    testNodes.add(new TestNodes(true, player, depth));
+		for (Capsule capsul : capsules) {
+			capsul.testMove(this.pos, player, depth);
+		}
+		return true;
 	}
+
+  public int getTestPlayer(int depth) {
+    alignTestToDepth(depth);
+    if (testNodes.size() > 0) {
+      return testNodes.peek().getPlayer();
+    } else {
+      return player;
+    }
+  }
+
+  public void alignTestToDepth(int depth) {
+    while (testNodes.size() > 0 && testNodes.peek().getDepth() > depth) {
+      testNodes.remove();
+    }
+  }
 }
