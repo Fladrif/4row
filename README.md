@@ -14,7 +14,6 @@ Values:
 ----------------
 caps : crit > val
 
-
 0 : 0 > 5
 
 0 : 1 > 12
@@ -23,7 +22,6 @@ caps : crit > val
 
 0 : 3 > 40
 
-
 1 : 0 > 3
 
 1 : 1 > 4
@@ -31,7 +29,6 @@ caps : crit > val
 1 : 2 > 10
 
 1 : 3 > 40
-
 
 2 : 0 > 1
 
@@ -45,5 +42,7 @@ caps : crit > val
 Structure:
 
 Node- each board position
+
 Capsule- collection of nodes that can win
+
 Board- Array of nodes and array of capsules
