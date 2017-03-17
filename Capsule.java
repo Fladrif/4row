@@ -67,10 +67,10 @@ public class Capsule {
 						val = 12 * owner;
 						break;
 					case 2:
-						val = 40 * owner;
+						val = 200 * owner;
 						break;
 					case 3:
-						val = 40 * owner;
+						val = 200 * owner;
 				}
 				break;
 			case 1:
@@ -85,7 +85,7 @@ public class Capsule {
 						val = 10 * owner;
 						break;
 					case 3:
-						val = 40 * owner;
+						val = 200 * owner;
 				}
 				break;
 			case 2:
@@ -100,7 +100,7 @@ public class Capsule {
 						val = 8 * owner;
 						break;
 					case 3:
-						val = 40 * owner;
+						val = 200 * owner;
 				}
 		}
     return val;

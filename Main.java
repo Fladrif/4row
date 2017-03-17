@@ -10,15 +10,18 @@ public class Main {
 		Board board = new Board();
 		board.getTotalValue();
     if (!board.play("D4", 1)) System.out.println("Played already");
-		board.getTotalValue();
-    if (!board.play("D5", -1)) System.out.println("Played already");
-		board.getTotalValue();
+		System.out.println(board.getTotalValue());
 
+    System.out.println("--- test D5 ---");
+    if (!board.test("D5", -1, 1)) System.out.println("Played already");
+    System.out.println(board.getTotalTestValue(1));
+    System.out.println("--- test E3 ---");
+    if (!board.test("E3", 1, 2)) System.out.println("Played already");
+    System.out.println(board.getTotalTestValue(2));
+    System.out.println("--- test E4 ---");
+    if (!board.test("E4", -1, 3)) System.out.println("Played already");
+    System.out.println(board.getTotalTestValue(3));
     board.rewindAll(0);
-    System.out.println("--- test F4 ---");
-    if (!board.test("F4", 1, 1)) System.out.println("Played already");
-    board.getTotalValue();
-    board.getTotalTestValue(1);
 
     board.rewindAll(0);
     System.out.println("--- test D6 ---");
@@ -26,12 +29,17 @@ public class Main {
     board.getTotalValue();
     board.getTotalTestValue(1);
 
+    System.out.println("--- test E3 ---");
+    if (!board.test("E3", 1, 1)) System.out.println("Played already");
+    System.out.println(board.getTotalTestValue(1));
     board.rewindAll(0);
-    System.out.println("--- test E5 ---");
-    if (!board.test("E5", 1, 1)) System.out.println("Played already");
-    board.getTotalValue();
-    board.getTotalTestValue(1);
 
+    if (!board.play("E3", 1)) System.out.println("Played already");
+		System.out.println(board.getTotalValue());
+
+    System.out.println("--- test E4 ---");
+    if (!board.test("E4", -1, 1)) System.out.println("Played already");
+    System.out.println(board.getTotalTestValue(1));
     board.rewindAll(0);
     System.out.println("--- test C5 ---");
     if (!board.test("C5", 1, 1)) System.out.println("Played already");

@@ -250,7 +250,6 @@ public class Board {
 		}
 	}
 
-  // TODO need to add depth param
 	public boolean test(String pos, int player, int depth) {
 		return nodes.stream().filter(node -> {
 				return node.getPos().equals(pos);
