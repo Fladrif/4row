@@ -1,5 +1,11 @@
 public class Main {
 	public static void main(String[] args) {
+    Board board = new Board();
+    Adversarial advSearch = new Adversarial();
+
+    advSearch.evaluate(board, 1);
+	}
+  public static void firstTest() {
 		Board board = new Board();
 		board.getTotalValue();
     if (!board.play("D4", 1)) System.out.println("Played already");
@@ -30,5 +36,5 @@ public class Main {
     if (!board.test("C5", 1, 1)) System.out.println("Played already");
     board.getTotalValue();
     board.getTotalTestValue(1);
-	}
+  }
 }

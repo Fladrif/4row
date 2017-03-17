@@ -161,7 +161,6 @@ public class Capsule {
     alignTestToDepth(depth);
     if (testCaps.size() > 0) {
       int temp = testCaps.peek().getValue();
-      if (temp > 0) System.out.println(temp);
       return testCaps.peek().getValue();
     } else {
       return value;

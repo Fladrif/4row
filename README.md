@@ -10,6 +10,13 @@ has an option for who to go first.
 
 Meant to play against other ai's.4row
 
+To Run:
+---------------
+From the terminal
+
+  javac Main.java
+  java Main
+
 Values:
 ----------------
 caps : crit > val
