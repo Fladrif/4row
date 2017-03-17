@@ -43,7 +43,6 @@ public class Adversarial {
       for (int i = 1; i < 9; i++) {
         for (int j = 1; j < 9; j++) {
           String curPlay = dict.get(i) + Integer.toString(j);
-          System.out.println(curPlay);
 
           if (board.test(curPlay, player, curDepth)) {
             ResponsePair curPair = recursiveEval(board, curDepth + 1, totalDepth);
@@ -77,7 +76,6 @@ public class Adversarial {
         }
       }
     }
-    System.out.println(bestPlay + " " + best);
     return new ResponsePair(bestPlay, best);
   }
 }

@@ -31,10 +31,17 @@ public class Capsule {
 			.filter(node -> node.getPos().equals(pos))
 			.findFirst().orElse(null);
 		if (cap != null) {
-			capsPlayed += cap.getPlayer() != owner ? 1 : 0;
-			return;
-		}
-		if (owner == 0) owner = player;
+      if (owner != 0) {
+			  capsPlayed += cap.getPlayer() != owner ? 1 : 0;
+      }
+		} else {
+      if (owner == 0) {
+        owner = player;
+        for (Node nod : caps) {
+          if (nod.getPlayer() == owner * -1) capsPlayed++;
+        }
+      }
+    }
 		Node cri = crit.stream()
 			.filter(node -> node.getPos().equals(pos))
 			.findFirst().orElse(null);
@@ -45,7 +52,7 @@ public class Capsule {
 				alive = false;
 			}
 		}
-		if (alive) value = calculateVal(this.capsPlayed, this.critPlayed);
+		if (alive && owner != 0) value = calculateVal(this.capsPlayed, this.critPlayed);
 	}
 
 	private int calculateVal(int caps, int crit) {
@@ -135,12 +142,21 @@ public class Capsule {
 			.filter(node -> node.getPos().equals(pos))
 			.findFirst().orElse(null);
 		if (cap != null) {
-      if (player != testCaps.peek().getOwner()) {
-        testCaps.peek().setCapsPlayed(testCaps.peek().getCapsPlayed() + 1);
+      if (testCaps.peek().getOwner() != 0) {
+        if (player != testCaps.peek().getOwner()) {
+          testCaps.peek().setCapsPlayed(testCaps.peek().getCapsPlayed() + 1);
+        }
       }
-			return;
-		}
-		if (owner == 0) owner = player;
+		} else {
+      if (testCaps.peek().getOwner() == 0) {
+        testCaps.peek().setOwner(player);
+        for (Node nod : caps) {
+          if (nod.getTestPlayer(depth) == testCaps.peek().getOwner() * -1) {
+            testCaps.peek().setCapsPlayed(testCaps.peek().getCapsPlayed() + 1);
+          }
+        }
+      }
+    }
 		Node cri = crit.stream()
 			.filter(node -> node.getPos().equals(pos))
 			.findFirst().orElse(null);
@@ -151,8 +167,9 @@ public class Capsule {
         testCaps.peek().setAlive(false);
 			}
 		}
-		if (testCaps.peek().getAlive()) {
+		if (testCaps.peek().getAlive() && testCaps.peek().getOwner() != 0) {
       int val = calculateVal(testCaps.peek().getCapsPlayed(), testCaps.peek().getCritPlayed());
+      System.out.println(pos + " " + val);
       testCaps.peek().setValue(val);
     }
 	}
@@ -160,7 +177,6 @@ public class Capsule {
   public int getTestValue(int depth) {
     alignTestToDepth(depth);
     if (testCaps.size() > 0) {
-      int temp = testCaps.peek().getValue();
       return testCaps.peek().getValue();
     } else {
       return value;

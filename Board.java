@@ -36,7 +36,6 @@ public class Board {
 		for (Capsule capsul : capsules) {
 			if (capsul.isAlive()) total += capsul.getValue();
 		}
-		System.out.println(total);
 		return total;
 	}
 
@@ -265,7 +264,6 @@ public class Board {
 		for (Capsule capsul : capsules) {
 			if (capsul.isTestAlive(depth)) total += capsul.getTestValue(depth);
 		}
-		System.out.println(total);
 		return total;
 	}
 

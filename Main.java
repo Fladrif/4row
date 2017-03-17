@@ -3,8 +3,9 @@ public class Main {
     Board board = new Board();
     Adversarial advSearch = new Adversarial();
 
-    advSearch.evaluate(board, 1);
+    System.out.println(advSearch.evaluate(board, 1));
 	}
+
   public static void firstTest() {
 		Board board = new Board();
 		board.getTotalValue();
@@ -21,7 +22,7 @@ public class Main {
 
     board.rewindAll(0);
     System.out.println("--- test D6 ---");
-    if (!board.test("D6", 1, 1)) System.out.println("Played already");
+    if (!board.test("D6", -1, 1)) System.out.println("Played already");
     board.getTotalValue();
     board.getTotalTestValue(1);
 
